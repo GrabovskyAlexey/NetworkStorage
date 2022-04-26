@@ -7,9 +7,10 @@ import ru.gb.storage.server.models.User;
 import ru.gb.storage.server.services.interfaces.AuthService;
 
 public class AuthServiceImpl implements AuthService {
+    private UserDAO userDAO = new UserDAOImpl();
+
     @Override
     public boolean authenticate(String login, String password) {
-        UserDAO userDAO = new UserDAOImpl();
         User user = userDAO.findByLogin(login);
         if (user == null) {
             return false;

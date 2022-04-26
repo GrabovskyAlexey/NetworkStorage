@@ -7,7 +7,7 @@ import ru.gb.storage.server.models.User;
 import ru.gb.storage.server.services.interfaces.RegisterService;
 
 public class RegisterServiceImpl implements RegisterService {
-    UserDAO userDAO = new UserDAOImpl();
+    private UserDAO userDAO = new UserDAOImpl();
 
     @Override
     public void register(String login, String password) {

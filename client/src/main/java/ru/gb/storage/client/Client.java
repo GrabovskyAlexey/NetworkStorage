@@ -19,6 +19,7 @@ public class Client extends Application {
     private LoginController loginController;
     private MainController mainController;
     private boolean authenticate;
+    private Stage loginForm;
 
     public NetworkService getNetworkService() {
         return networkService;
@@ -43,7 +44,8 @@ public class Client extends Application {
     public void start(Stage stage) throws Exception {
         this.networkService = new NetworkServiceImpl(this);
         networkService.start();
-        showLoginWindow(stage);
+        prepareLoginWindow(stage);
+        loginForm.showAndWait();
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Client.class.getResource("/mainForm.fxml"));
@@ -57,19 +59,18 @@ public class Client extends Application {
         stop();
     }
 
-    public void showLoginWindow(Stage stage) {
+    public void prepareLoginWindow(Stage stage) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(Client.class.getResource("/loginForm.fxml"));
             AnchorPane loginPane = loader.load();
-            Stage loginForm = new Stage();
+            loginForm = new Stage();
             loginForm.setTitle("Login");
             loginForm.initModality(Modality.WINDOW_MODAL);
             loginForm.initOwner(stage);
             loginController = loader.getController();
             loginController.setClient(this);
             loginForm.setScene(new Scene(loginPane));
-            loginForm.showAndWait();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -31,11 +31,6 @@ public class LoginController {
         this.client = client;
     }
 
-    @FXML
-    private void initialize() {
-
-    }
-
     public void changeBtnText(ActionEvent actionEvent) {
         if (cbRegister.isSelected()) {
             btnOk.setText("Register");

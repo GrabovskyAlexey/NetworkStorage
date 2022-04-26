@@ -21,7 +21,7 @@ import ru.gb.storage.commons.messages.Message;
 
 public class NetworkServiceImpl implements NetworkService {
     private Channel channel;
-    final NioEventLoopGroup group = new NioEventLoopGroup(1);
+    private final NioEventLoopGroup group = new NioEventLoopGroup(1);
     private boolean connected;
     private Client client;
 
@@ -30,41 +30,41 @@ public class NetworkServiceImpl implements NetworkService {
     }
 
     @Override
-    public void start() {
-        Task<Channel> task = new Task<Channel>() {
-
-            @Override
-            protected Channel call() throws Exception {
-                Bootstrap bootstrap = new Bootstrap()
-                        .group(group)
-                        .channel(NioSocketChannel.class)
-                        .option(ChannelOption.SO_KEEPALIVE, true)
-                        .handler(new ChannelInitializer<SocketChannel>() {
-                            @Override
-                            protected void initChannel(SocketChannel ch) {
-                                ch.pipeline().addLast(
-                                        new LengthFieldBasedFrameDecoder(1024 * 1024, 0, 3, 0, 3),
-                                        new LengthFieldPrepender(3),
-                                        new StringDecoder(),
-                                        new StringEncoder(),
-                                        new JsonDecoder(),
-                                        new JsonEncoder(),
-                                        new ClientHandler(client)
-                                );
-                            }
-                        });
-                System.out.println("Client started");
-                return bootstrap.connect("localhost", 9000).sync().channel();
-            }
-
-            @Override
-            protected void succeeded() {
-                channel = getValue();
-                connected = true;
-            }
-        };
-        new Thread(task).start();
+    public void start() throws InterruptedException {
+//        Task<Channel> task = new Task<Channel>() {
+//
+//            @Override
+//            protected Channel call() throws Exception {
+        Bootstrap bootstrap = new Bootstrap()
+                .group(group)
+                .channel(NioSocketChannel.class)
+                .option(ChannelOption.SO_KEEPALIVE, true)
+                .handler(new ChannelInitializer<SocketChannel>() {
+                    @Override
+                    protected void initChannel(SocketChannel ch) {
+                        ch.pipeline().addLast(
+                                new LengthFieldBasedFrameDecoder(1024 * 1024, 0, 3, 0, 3),
+                                new LengthFieldPrepender(3),
+                                new StringDecoder(),
+                                new StringEncoder(),
+                                new JsonDecoder(),
+                                new JsonEncoder(),
+                                new ClientHandler(client)
+                        );
+                    }
+                });
+        System.out.println("Client started");
+        channel = bootstrap.connect("localhost", 9000).sync().channel();
     }
+
+//            @Override
+//            protected void succeeded() {
+//                channel = getValue();
+//                connected = true;
+//            }
+//        };
+//        new Thread(task).start();
+
 
     @Override
     public void stop() {
@@ -77,8 +77,12 @@ public class NetworkServiceImpl implements NetworkService {
 
     @Override
     public void send(Message msg) {
-        if(!connected){
-            start();
+        if (!connected) {
+            try {
+                start();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         channel.writeAndFlush(msg);
     }
