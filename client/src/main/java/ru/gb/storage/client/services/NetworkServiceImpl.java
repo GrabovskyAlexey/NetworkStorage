@@ -31,10 +31,6 @@ public class NetworkServiceImpl implements NetworkService {
 
     @Override
     public void start() throws InterruptedException {
-//        Task<Channel> task = new Task<Channel>() {
-//
-//            @Override
-//            protected Channel call() throws Exception {
         Bootstrap bootstrap = new Bootstrap()
                 .group(group)
                 .channel(NioSocketChannel.class)
@@ -56,15 +52,6 @@ public class NetworkServiceImpl implements NetworkService {
         System.out.println("Client started");
         channel = bootstrap.connect("localhost", 9000).sync().channel();
     }
-
-//            @Override
-//            protected void succeeded() {
-//                channel = getValue();
-//                connected = true;
-//            }
-//        };
-//        new Thread(task).start();
-
 
     @Override
     public void stop() {
