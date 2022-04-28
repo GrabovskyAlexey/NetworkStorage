@@ -11,7 +11,6 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
-import javafx.concurrent.Task;
 import ru.gb.storage.client.Client;
 import ru.gb.storage.client.handlers.ClientHandler;
 import ru.gb.storage.client.services.interfaces.NetworkService;
@@ -51,6 +50,7 @@ public class NetworkServiceImpl implements NetworkService {
                 });
         System.out.println("Client started");
         channel = bootstrap.connect("localhost", 9000).sync().channel();
+//        channel.closeFuture().sync();
     }
 
     @Override
@@ -63,14 +63,7 @@ public class NetworkServiceImpl implements NetworkService {
     }
 
     @Override
-    public void send(Message msg) {
-        if (!connected) {
-            try {
-                start();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+    public void send(Message msg) throws InterruptedException {
         channel.writeAndFlush(msg);
     }
 }

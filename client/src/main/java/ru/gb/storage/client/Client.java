@@ -56,7 +56,6 @@ public class Client extends Application {
         if (authenticate) {
             stage.show();
         }
-        stop();
     }
 
     public void prepareLoginWindow(Stage stage) {

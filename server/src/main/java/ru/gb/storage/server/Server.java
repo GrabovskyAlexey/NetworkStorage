@@ -54,6 +54,7 @@ public class Server {
 
             System.out.println("Server started");
             future.channel().closeFuture().sync();
+            System.out.println("Server close");
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
