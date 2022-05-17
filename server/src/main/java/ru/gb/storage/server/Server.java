@@ -19,7 +19,9 @@ public class Server {
     private final int port;
 
     public static void main(String[] args) throws InterruptedException {
+        System.out.println("Server started");
         new Server(9000).start();
+        System.out.println("Server close");
     }
 
     public Server(int port) {
@@ -52,9 +54,7 @@ public class Server {
 
             ChannelFuture future = server.bind(port).sync();
 
-            System.out.println("Server started");
             future.channel().closeFuture().sync();
-            System.out.println("Server close");
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();

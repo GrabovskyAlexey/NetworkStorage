@@ -6,8 +6,8 @@
         <!-- SQL dialect -->
         <property name="dialect">org.sqlite.hibernate.dialect.SQLiteDialect</property>
         <!-- Show and print nice SQL on stdout -->
-        <property name="show_sql">true</property>
-        <property name="format_sql">true</property>
+        <property name="show_sql">false</property>
+        <property name="format_sql">false</property>
         <!-- Create Database -->
         <property name="hibernate.hbm2ddl.auto">update</property>
 <!--        <mapping class="ru.gb.storage.server.models.User"/>-->

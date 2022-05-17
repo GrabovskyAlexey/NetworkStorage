@@ -1,13 +1,11 @@
 package ru.gb.storage.commons.messages;
 
-public class FileNotFoundMessage extends Message{
-    private String errorText;
-
-    public String getErrorText() {
-        return errorText;
+public class FileNotFoundMessage extends ErrorMessage {
+    public FileNotFoundMessage() {
+        super();
     }
 
-    public void setErrorText(String errorText) {
-        this.errorText = errorText;
+    public FileNotFoundMessage(String errorMessage) {
+        super(errorMessage);
     }
 }

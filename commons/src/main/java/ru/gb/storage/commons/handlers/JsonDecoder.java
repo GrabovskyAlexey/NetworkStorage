@@ -1,8 +1,6 @@
 package ru.gb.storage.commons.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import ru.gb.storage.commons.messages.Message;
@@ -14,7 +12,7 @@ public class JsonDecoder extends MessageToMessageDecoder<String> {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, String msg, List<Object> out) throws Exception {
-        System.out.println("Decode message: " + msg);
+//        System.out.println("Incoming message: " + msg);
         Message message = OBJECT_MAPPER.readValue(msg, Message.class);
         out.add(message);
     }

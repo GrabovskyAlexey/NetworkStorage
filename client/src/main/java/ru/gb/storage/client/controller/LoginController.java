@@ -12,16 +12,12 @@ import ru.gb.storage.commons.messages.RegisterRequestMessage;
 public class LoginController {
     @FXML
     private Button btnOk;
-
     @FXML
     private CheckBox cbRegister;
-
     @FXML
     private TextField textLogin;
-
     @FXML
     private PasswordField textPassword;
-
     @FXML
     private Label labelStatus;
 
@@ -29,6 +25,11 @@ public class LoginController {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    @FXML
+    public void initialize(){
+        labelStatus.setTextFill(Color.RED);
     }
 
     public void changeBtnText(ActionEvent actionEvent) {
@@ -39,7 +40,18 @@ public class LoginController {
         }
     }
 
-    public void sendRequest(ActionEvent actionEvent) throws InterruptedException {
+    public void sendRequest(ActionEvent actionEvent){
+        if(textLogin.getText().isEmpty()){
+            textLogin.setStyle("-fx-border-color: red");
+        }
+        if(textPassword.getText().isEmpty()){
+            textPassword.setStyle("-fx-border-color: red");
+        }
+        if(textPassword.getText().isEmpty() || textLogin.getText().isEmpty()){
+            labelStatus.setText("Login or Password could not be empty");
+            return;
+        }
+
         String login = textLogin.getText();
         String password = textPassword.getText();
         if (cbRegister.isSelected()) {
@@ -63,7 +75,6 @@ public class LoginController {
 
     public void authenticateError(String errorMessage) {
         labelStatus.setText(errorMessage);
-        labelStatus.setTextFill(Color.RED);
     }
 
     public void registerSuccess() {
@@ -74,6 +85,5 @@ public class LoginController {
 
     public void registerError(String errorMessage) {
         labelStatus.setText(errorMessage);
-        labelStatus.setTextFill(Color.RED);
     }
 }

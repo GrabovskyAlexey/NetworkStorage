@@ -19,7 +19,6 @@ public class UserDAOImpl implements UserDAO {
     public User findByLogin(String login) {
         Query query = HibernateSessionFactoryUtil.getSessionFactory().openSession().createQuery("from User where login = :login");
         query.setParameter("login", login);
-        System.out.println("User login: " + login);
         User user = null;
         try {
             user = (User) query.getSingleResult();

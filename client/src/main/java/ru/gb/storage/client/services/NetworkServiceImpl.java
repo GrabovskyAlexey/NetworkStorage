@@ -2,6 +2,7 @@ package ru.gb.storage.client.services;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -11,12 +12,17 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import javafx.application.Platform;
 import ru.gb.storage.client.Client;
 import ru.gb.storage.client.handlers.ClientHandler;
 import ru.gb.storage.client.services.interfaces.NetworkService;
 import ru.gb.storage.commons.handlers.JsonDecoder;
 import ru.gb.storage.commons.handlers.JsonEncoder;
+import ru.gb.storage.commons.helpers.FileTransferHelper;
+import ru.gb.storage.commons.messages.FileResponseMessage;
 import ru.gb.storage.commons.messages.Message;
+
+import java.io.IOException;
 
 public class NetworkServiceImpl implements NetworkService {
     private Channel channel;
@@ -50,7 +56,6 @@ public class NetworkServiceImpl implements NetworkService {
                 });
         System.out.println("Client started");
         channel = bootstrap.connect("localhost", 9000).sync().channel();
-//        channel.closeFuture().sync();
     }
 
     @Override
@@ -63,7 +68,20 @@ public class NetworkServiceImpl implements NetworkService {
     }
 
     @Override
-    public void send(Message msg) throws InterruptedException {
+    public void send(Message msg) {
         channel.writeAndFlush(msg);
+    }
+
+    public void send(FileTransferHelper helper) throws IOException {
+        FileResponseMessage response = helper.getNextPart();
+        double percent = ((double) response.getCurrentPart() * 100) / response.getAllParts();
+        Platform.runLater(() -> client.getMainController().showProgressBar(response.getFilename(), percent));
+        channel.writeAndFlush(response).addListener((ChannelFutureListener) channelFuture -> {
+            if (helper.hasNextPart()) {
+                send(helper);
+            } else {
+                helper.close();
+            }
+        });
     }
 }

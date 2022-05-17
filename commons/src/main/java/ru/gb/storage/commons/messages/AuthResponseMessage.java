@@ -1,6 +1,6 @@
 package ru.gb.storage.commons.messages;
 
-public class AuthResponseMessage extends Message{
+public class AuthResponseMessage extends Message {
     private MessageStatus status;
     private String text;
 
