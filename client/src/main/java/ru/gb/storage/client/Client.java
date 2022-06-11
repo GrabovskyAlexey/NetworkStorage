@@ -4,12 +4,14 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.gb.storage.client.controller.LoginController;
 import ru.gb.storage.client.controller.MainController;
 import ru.gb.storage.client.services.NetworkServiceImpl;
 import ru.gb.storage.client.services.interfaces.NetworkService;
+import ru.gb.storage.commons.messages.FileListRequestMessage;
 
 import java.io.IOException;
 
@@ -29,8 +31,8 @@ public class Client extends Application {
         return loginController;
     }
 
-    public boolean isAuthenticate() {
-        return authenticate;
+    public MainController getMainController() {
+        return mainController;
     }
 
     public void setAuthenticate(boolean authenticate) {
@@ -49,12 +51,16 @@ public class Client extends Application {
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Client.class.getResource("/mainForm.fxml"));
-        AnchorPane mainForm = loader.load();
+        VBox mainForm = loader.load();
         stage.setTitle("Main Window");
         mainController = loader.getController();
+        mainController.setClient(this);
         stage.setScene(new Scene(mainForm));
         if (authenticate) {
             stage.show();
+            FileListRequestMessage flr = new FileListRequestMessage();
+            networkService.send(flr);
+            mainController.fillClientTable();
         }
     }
 

@@ -1,6 +1,6 @@
 package ru.gb.storage.commons.messages;
 
-public class RegisterResponseMessage extends Message{
+public class RegisterResponseMessage extends Message {
     private MessageStatus status;
     private String text;
 

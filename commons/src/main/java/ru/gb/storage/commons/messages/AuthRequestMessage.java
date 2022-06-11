@@ -1,6 +1,6 @@
 package ru.gb.storage.commons.messages;
 
-public class AuthRequestMessage extends Message{
+public class AuthRequestMessage extends Message {
     private String login;
     private String password;
 

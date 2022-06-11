@@ -6,6 +6,15 @@ public class FileResponseMessage extends Message {
     private int allParts;
     private long startPosition;
     private byte[] content;
+    private String pathToSave;
+
+    public String getPathToSave() {
+        return pathToSave;
+    }
+
+    public void setPathToSave(String pathToSave) {
+        this.pathToSave = pathToSave;
+    }
 
     public String getFilename() {
         return filename;
