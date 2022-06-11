@@ -39,7 +39,7 @@ public class LoginController {
         }
     }
 
-    public void sendRequest(ActionEvent actionEvent) {
+    public void sendRequest(ActionEvent actionEvent) throws InterruptedException {
         String login = textLogin.getText();
         String password = textPassword.getText();
         if (cbRegister.isSelected()) {
